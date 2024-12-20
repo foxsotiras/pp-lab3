@@ -1,5 +1,6 @@
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout,\
+    QPushButton
 from PySide6.QtGui import QPainter, QColor, QMouseEvent
 from PySide6.QtCore import Qt
 
@@ -39,6 +40,10 @@ class DrawingWidget(QWidget):
             self.current_point = None
             self.update()
 
+    def clearDrawing(self):
+        self.lines = []
+        self.update()
+
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -51,8 +56,17 @@ class MainWindow(QWidget):
 
         self.drawing_widget = DrawingWidget()
 
+        self.clear_button = QPushButton("Clear")
+        self.clear_button.clicked\
+            .connect(self.drawing_widget.clearDrawing)
+        self.clear_button.setStyleSheet("""
+            background-color: #1e1e1e;
+            color: #fff;
+            """)
+
         self.layout = QVBoxLayout(self)
         self.layout.addWidget(self.drawing_widget)
+        self.layout.addWidget(self.clear_button)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
